@@ -1,9 +1,9 @@
 name: Check Repository List
 
 on:
-#   push:
-#     branches:
-#       - main
+  push:
+    branches:
+      - main
 #   pull_request:
 #     branches:
 #       - main
