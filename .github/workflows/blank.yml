@@ -37,7 +37,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: build-artifact
-        path: downloaded/
+        path: ./downloaded/
 
     - name: Install Databricks CLI
       run: pip install databricks-cli
