@@ -55,7 +55,7 @@ jobs:
 
     - name: Deploy to Databricks
       run: |
-        databricks workspace import downloaded/ --format SOURCE /Repos/priyanka.rajmane@bajajfinserv.in/PRGITHUBDBIntegration
+        databricks workspace import downloaded/
       env:
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
