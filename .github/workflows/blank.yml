@@ -1,0 +1,71 @@
+name: Build, Store, and Deploy Artifact
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v3
+    #   with:
+    #     node-version: '14'
+
+    # - name: Install dependencies
+    #   run: npm install
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifact
+        path: TESTING_FOLDER/
+        retention-days: 1  # Store the artifact for 1 day
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifact
+
+    - name: Install Databricks CLI
+      run: pip install databricks-cli
+
+    - name: Set environment variables
+      env:
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+      run: |
+        echo "DATABRICKS_HOST=${{ secrets.DATABRICKS_HOST }}" >> $GITHUB_ENV
+        echo "DATABRICKS_TOKEN=${{ secrets.DATABRICKS_TOKEN }}" >> $GITHUB_ENV
+
+    - name: Set up Databricks CLI
+      uses: databricks/setup-cli@main
+
+    - name: Deploy to Databricks
+      run: |
+        databricks workspace import_dir TESTING_FOLDER/ /Workspace/Repos/priyanka.rajmane@bajajfinserv.in/GitHub_BIU_TestFinal_Mar11
+      env:
+        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+    # - name: Update Databricks Git folder
+    #   run: |
+    #     databricks repos update ${{env.REPO_PATH}} --branch "${{ steps.extract_branch.outputs.branch }}"
+    #   env:
+    #     DATABRICKS_HOST: ${{ secrets.DEPLOYMENT_TARGET_URL }}
+    #     DATABRICKS_TOKEN: ${{ secrets.DEPLOYMENT_TARGET_TOKEN }}
+    #     REPO_PATH: /Workspace/Repos/priyanka.rajmane@bajajfinserv.in/GitHub_BIU_TestFinal_Mar11
