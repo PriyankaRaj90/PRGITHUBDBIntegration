@@ -1,9 +1,10 @@
 name: Check Repository List
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:  
+#   push:
+#     branches:
+#       - main
 #   pull_request:
 #     branches:
 #       - main
