@@ -60,8 +60,8 @@ jobs:
         LOCAL_NOTEBOOK_DIR="TestingFolder"
         REMOTE_NOTEBOOK_DIR="/Repos/priyanka.rajmane@bajajfinserv.in/PRGITHUBDBIntegration/TestingFolder"
         
-        # Create remote directory if it doesn't exist
-        databricks workspace mkdirs "$REMOTE_NOTEBOOK_DIR"
+        # # Create remote directory if it doesn't exist
+        # databricks workspace mkdirs "$REMOTE_NOTEBOOK_DIR"
 
         # Upload all notebooks
         for notebook in $(find $LOCAL_NOTEBOOK_DIR -name '*.py' -o -name '*.ipynb'); do
