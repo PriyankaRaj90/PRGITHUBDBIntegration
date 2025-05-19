@@ -53,14 +53,13 @@ jobs:
     - name: Set up Databricks CLI
       uses: databricks/setup-cli@main
 
-
     - name: Deploy Notebooks to Databricks
       run: |
         # Define local and remote paths
         LOCAL_NOTEBOOK_DIR="TestingFolder"
         REMOTE_NOTEBOOK_DIR="/Repos/priyanka.rajmane@bajajfinserv.in/PRGITHUBDBIntegration/TestingFolder"
         
-        # # Create remote directory if it doesn't exist
+        # Create remote directory if it doesn't exist
         # databricks workspace mkdirs "$REMOTE_NOTEBOOK_DIR"
 
         # Upload all notebooks
