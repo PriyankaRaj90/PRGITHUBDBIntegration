@@ -56,7 +56,7 @@ jobs:
 
     - name: Deploy Notebooks to Databricks
       run: |
-        LOCAL_NOTEBOOK_DIR="TestingFolder"
+        LOCAL_NOTEBOOK_DIR="TestingFolder/"
         REMOTE_NOTEBOOK_DIR="/Repos/priyanka.rajmane@bajajfinserv.in/PRGITHUBDBIntegration/TestingFolder/"
         databricks workspace mkdirs "$REMOTE_NOTEBOOK_DIR"
         for notebook in $(find $LOCAL_NOTEBOOK_DIR -name '*.py' -o -name '*.ipynb'); do
