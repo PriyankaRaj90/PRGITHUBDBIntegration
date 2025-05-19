@@ -18,11 +18,11 @@ jobs:
       with:
         python-version: '3.10'
         
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-artifact
-        path: TestingFolder/
+    # - name: Upload artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: build-artifact
+    #     path: TestingFolder/
 
   deploy:
     needs: build
@@ -33,11 +33,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: build-artifact
-        path: ./downloaded/
+    # - name: Download artifact
+    #   uses: actions/download-artifact@v4
+    #   with:
+    #     name: build-artifact
+    #     path: ./downloaded/
 
     - name: Install Databricks CLI
       run: pip install databricks-cli
@@ -53,9 +53,25 @@ jobs:
     - name: Set up Databricks CLI
       uses: databricks/setup-cli@main
 
-    - name: Deploy to Databricks
-      run: |
-        databricks workspace import /TestingFolder/
-      env:
-        DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-        DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+    - name: Deploy Notebooks to Databricks
+      run: |  
+        # Define local and remote paths
+        LOCAL_NOTEBOOK_DIR = "TestingFolder"
+        REMOTE_NOTEBOOK_DIR = "/Repos/priyanka.rajmane@bajajfinserv.in/PRGITHUBDBIntegration/TestingFolder"
+        
+        # Create remote directory if it doesn't exist
+        databricks workspace mkdirs "$REMOTE_NOTEBOOK_DIR"
+
+        # Upload all notebooks
+        for notebook in $(find $LOCAL_NOTEBOOK_DIR -name '*.py' -o -name '*.ipynb'); do
+            remote_path="$REMOTE_NOTEBOOK_DIR/$(basename "$notebook")"
+           databricks workspace import "$notebook" "$remote_path" --overwrite
+        done
+
+    # - name: Deploy to Databricks
+    #   run: |
+    #     databricks workspace import /TestingFolder/
+    #   env:
+    #     DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+    #     DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
